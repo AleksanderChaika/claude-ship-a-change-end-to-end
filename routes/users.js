@@ -32,6 +32,9 @@ router.post("/", (req, res) => {
   res.status(201).json(user);
 });
 
+// Deliberately minimal: something@something, no whitespace, a single "@".
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+$/;
+
 function isNonEmptyString(value) {
   return typeof value === "string" && value.trim() !== "";
 }
@@ -47,7 +50,7 @@ router.put("/:id", (req, res) => {
       .json({ error: "name and email are required and must be non-empty strings" });
   }
 
-  if (!email.includes("@")) {
+  if (!EMAIL_PATTERN.test(email.trim())) {
     return res.status(400).json({ error: "email must be a valid email address" });
   }
 
